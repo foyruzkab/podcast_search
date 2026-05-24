@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
-    "migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
+    "migrate": "prisma db push --schema=./prisma/schema.prisma",
     "seed": "tsx prisma/seed.ts",
     "ingest": "tsx src/ingest/run.ts"
   },
