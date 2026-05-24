@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Podcast {
+  id           String    @id @default(cuid())
+  feedUrl      String    @unique
+  title        String
+  description  String
+  host         String?
+  thumbnailUrl String?
+  indexedAt    DateTime  @default(now())
+  episodes     Episode[]
+  reviews      Review[]
+  ratings      Rating[]
+}
+
+model Episode {
+  id          String      @id @default(cuid())
+  podcastId   String
+  podcast     Podcast     @relation(fields: [podcastId], references: [id])
+  externalId  String?     @unique
+  title       String
+  description String?
+  publishedAt DateTime?
+  audioUrl    String?
+  transcript  Transcript?
+}
+
+model Transcript {
+  id        String  @id @default(cuid())
+  episodeId String  @unique
+  episode   Episode @relation(fields: [episodeId], references: [id])
+  content   String
+  source    String
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  reviews      Review[]
+  ratings      Rating[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  podcastId String
+  podcast   Podcast  @relation(fields: [podcastId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model Rating {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id])
+  podcastId String
+  podcast   Podcast @relation(fields: [podcastId], references: [id])
+  stars     Int
+
+  @@unique([userId, podcastId])
+}
