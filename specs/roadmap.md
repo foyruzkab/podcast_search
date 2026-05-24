@@ -7,7 +7,8 @@ Goal: a working search experience with real podcast data.
 - [ ] Project scaffold: monorepo with `/web` (Vite + React) and `/server` (Express + Prisma)
 - [ ] Database schema: `podcasts`, `episodes`, `users`, `reviews`, `ratings`
 - [ ] Podcast Index API integration: ingest metadata and thumbnails into Postgres
-- [ ] Search endpoint: full-text search via `pg_tsvector` across title, description, host
+- [ ] Transcript ingestion: fetch or generate episode transcripts and store them in Postgres
+- [ ] Search endpoint: full-text search via `pg_tsvector` across title, description, host, and transcript content
 - [ ] Search UI: search bar, results grid with podcast thumbnails, title, and description
 - [ ] Podcast detail page: cover art, description, episode list, average rating
 
@@ -46,4 +47,3 @@ Goal: production-ready web app; mobile app foundations.
 - Podcast audio playback (use native apps for that)
 - Creator / podcast owner accounts
 - Paid placement or sponsored results
-- Podcast transcription or episode-level search
