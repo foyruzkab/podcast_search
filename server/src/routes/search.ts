@@ -32,22 +32,22 @@ router.get('/', async (req, res) => {
             to_tsvector('english', p.title || ' ' || p.description || ' ' || COALESCE(p.host, '')),
             plainto_tsquery('english', ${q})
           ) AS rank
-        FROM podcasts p
+        FROM "Podcast" p
         WHERE to_tsvector('english', p.title || ' ' || p.description || ' ' || COALESCE(p.host, ''))
               @@ plainto_tsquery('english', ${q})
         UNION
         SELECT p.id,
           ts_rank(to_tsvector('english', t.content), plainto_tsquery('english', ${q})) AS rank
-        FROM podcasts p
-        JOIN episodes e ON e."podcastId" = p.id
-        JOIN transcripts t ON t."episodeId" = e.id
+        FROM "Podcast" p
+        JOIN "Episode" e ON e."podcastId" = p.id
+        JOIN "Transcript" t ON t."episodeId" = e.id
         WHERE to_tsvector('english', t.content) @@ plainto_tsquery('english', ${q})
       ),
       best AS (
         SELECT id, MAX(rank) AS rank FROM matches GROUP BY id
       )
       SELECT p.id, p."feedUrl", p.title, p.description, p.host, p."thumbnailUrl", p."indexedAt", best.rank
-      FROM podcasts p
+      FROM "Podcast" p
       JOIN best ON best.id = p.id
       ORDER BY best.rank DESC
       LIMIT 20
